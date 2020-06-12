@@ -41,9 +41,7 @@ def train(cfg, local_rank, distributed):
             broadcast_buffers=False,
         )
 
-    arguments = {}
-    arguments["iteration"] = 0
-
+    arguments = {"iteration": 0}
     output_dir = cfg.OUTPUT_DIR
 
     save_to_disk = get_rank() == 0

@@ -81,9 +81,9 @@ class Polygons(object):
             dim = height
             idx = 1
 
+        TO_REMOVE = 1
         for poly in self.polygons:
             p = poly.clone()
-            TO_REMOVE = 1
             p[idx::2] = dim - poly[idx::2] - TO_REMOVE
             flipped_polygons.append(p)
 
@@ -123,8 +123,8 @@ class Polygons(object):
         return Polygons(scaled_polygons, size=size, mode=self.mode)
 
     def convert(self, mode):
-        width, height = self.size
         if mode == "mask":
+            width, height = self.size
             rles = mask_utils.frPyObjects(
                 [p.numpy() for p in self.polygons], height, width
             )
@@ -168,22 +168,16 @@ class SegmentationMask(object):
                 "Only FLIP_LEFT_RIGHT and FLIP_TOP_BOTTOM implemented"
             )
 
-        flipped = []
-        for polygon in self.polygons:
-            flipped.append(polygon.transpose(method))
+        flipped = [polygon.transpose(method) for polygon in self.polygons]
         return SegmentationMask(flipped, size=self.size, mode=self.mode)
 
     def crop(self, box):
         w, h = box[2] - box[0], box[3] - box[1]
-        cropped = []
-        for polygon in self.polygons:
-            cropped.append(polygon.crop(box))
+        cropped = [polygon.crop(box) for polygon in self.polygons]
         return SegmentationMask(cropped, size=(w, h), mode=self.mode)
 
     def resize(self, size, *args, **kwargs):
-        scaled = []
-        for polygon in self.polygons:
-            scaled.append(polygon.resize(size, *args, **kwargs))
+        scaled = [polygon.resize(size, *args, **kwargs) for polygon in self.polygons]
         return SegmentationMask(scaled, size=size, mode=self.mode)
 
     def to(self, *args, **kwargs):
@@ -193,14 +187,12 @@ class SegmentationMask(object):
         if isinstance(item, (int, slice)):
             selected_polygons = [self.polygons[item]]
         else:
-            # advanced indexing on a single dimension
-            selected_polygons = []
             if isinstance(item, torch.Tensor) and item.dtype == torch.uint8:
                 item = item.nonzero()
                 item = item.squeeze(1) if item.numel() > 0 else item
                 item = item.tolist()
-            for i in item:
-                selected_polygons.append(self.polygons[i])
+            # advanced indexing on a single dimension
+            selected_polygons = [self.polygons[i] for i in item]
         return SegmentationMask(selected_polygons, size=self.size, mode=self.mode)
 
     def __iter__(self):

@@ -60,5 +60,4 @@ class COCODataset(torchvision.datasets.coco.CocoDetection):
 
     def get_img_info(self, index):
         img_id = self.id_to_img_map[index]
-        img_data = self.coco.imgs[img_id]
-        return img_data
+        return self.coco.imgs[img_id]

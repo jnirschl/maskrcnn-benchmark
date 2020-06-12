@@ -17,7 +17,7 @@ def build_transforms(cfg, is_train=True):
         mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD, to_bgr255=to_bgr255
     )
 
-    transform = T.Compose(
+    return T.Compose(
         [
             T.Resize(min_size, max_size),
             T.RandomHorizontalFlip(flip_prob),
@@ -25,4 +25,3 @@ def build_transforms(cfg, is_train=True):
             normalize_transform,
         ]
     )
-    return transform

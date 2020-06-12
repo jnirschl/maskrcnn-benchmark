@@ -90,8 +90,7 @@ class ModelCatalog(object):
         prefix = ModelCatalog.S3_C2_DETECTRON_URL
         name = name[len("ImageNetPretrained/"):]
         name = ModelCatalog.C2_IMAGENET_MODELS[name]
-        url = "/".join([prefix, name])
-        return url
+        return "/".join([prefix, name])
 
     @staticmethod
     def get_c2_detectron_12_2017_baselines(name):
@@ -108,5 +107,4 @@ class ModelCatalog(object):
         model_name = "{}.yaml".format(model_name)
         signature = ModelCatalog.C2_DETECTRON_MODELS[name]
         unique_name = ".".join([model_name, signature])
-        url = "/".join([prefix, model_id, "12_2017_baselines", unique_name, suffix])
-        return url
+        return "/".join([prefix, model_id, "12_2017_baselines", unique_name, suffix])

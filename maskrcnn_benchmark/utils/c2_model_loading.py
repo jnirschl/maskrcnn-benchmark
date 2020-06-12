@@ -100,7 +100,7 @@ def _rename_weights_for_resnet(weights, stage_names):
 
     logger = logging.getLogger(__name__)
     logger.info("Remapping C2 weights")
-    max_c2_key_size = max([len(k) for k in original_keys if "_momentum" not in k])
+    max_c2_key_size = max(len(k) for k in original_keys if "_momentum" not in k)
 
     new_weights = OrderedDict()
     for k in original_keys:
@@ -120,15 +120,8 @@ def _rename_weights_for_resnet(weights, stage_names):
 
 def _load_c2_pickled_weights(file_path):
     with open(file_path, "rb") as f:
-        if torch._six.PY3:
-            data = pickle.load(f, encoding="latin1")
-        else:
-            data = pickle.load(f)
-    if "blobs" in data:
-        weights = data["blobs"]
-    else:
-        weights = data
-    return weights
+        data = pickle.load(f, encoding="latin1") if torch._six.PY3 else pickle.load(f)
+    return data["blobs"] if "blobs" in data else data
 
 
 _C2_STAGE_NAMES = {

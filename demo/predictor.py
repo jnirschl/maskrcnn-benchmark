@@ -145,7 +145,7 @@ class COCODemo(object):
             mean=cfg.INPUT.PIXEL_MEAN, std=cfg.INPUT.PIXEL_STD
         )
 
-        transform = T.Compose(
+        return T.Compose(
             [
                 T.ToPILImage(),
                 T.Resize(self.min_image_size),
@@ -154,7 +154,6 @@ class COCODemo(object):
                 normalize_transform,
             ]
         )
-        return transform
 
     def run_on_opencv_image(self, image):
         """
@@ -290,9 +289,7 @@ class COCODemo(object):
             )
             image = cv2.drawContours(image, contours, -1, color, 3)
 
-        composite = image
-
-        return composite
+        return image
 
     def create_mask_montage(self, image, predictions):
         """

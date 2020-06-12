@@ -137,7 +137,7 @@ def calc_detection_voc_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
     prec = [None] * n_fg_class
     rec = [None] * n_fg_class
 
-    for l in n_pos.keys():
+    for l, value in n_pos.items():
         score_l = np.array(score[l])
         match_l = np.array(match[l], dtype=np.int8)
 
@@ -151,7 +151,7 @@ def calc_detection_voc_prec_rec(gt_boxlists, pred_boxlists, iou_thresh=0.5):
         # the corresponding element of prec[l] is nan.
         prec[l] = tp / (fp + tp)
         # If n_pos[l] is 0, rec[l] is None.
-        if n_pos[l] > 0:
+        if value > 0:
             rec[l] = tp / n_pos[l]
 
     return prec, rec

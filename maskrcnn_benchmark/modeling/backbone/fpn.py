@@ -49,8 +49,7 @@ class FPN(nn.Module):
                 They are ordered from highest resolution first.
         """
         last_inner = getattr(self, self.inner_blocks[-1])(x[-1])
-        results = []
-        results.append(getattr(self, self.layer_blocks[-1])(last_inner))
+        results = [getattr(self, self.layer_blocks[-1])(last_inner)]
         for feature, inner_block, layer_block in zip(
             x[:-1][::-1], self.inner_blocks[:-1][::-1], self.layer_blocks[:-1][::-1]
         ):

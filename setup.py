@@ -43,7 +43,7 @@ def get_extensions():
 
     include_dirs = [extensions_dir]
 
-    ext_modules = [
+    return [
         extension(
             "maskrcnn_benchmark._C",
             sources,
@@ -52,8 +52,6 @@ def get_extensions():
             extra_compile_args=extra_compile_args,
         )
     ]
-
-    return ext_modules
 
 
 setup(

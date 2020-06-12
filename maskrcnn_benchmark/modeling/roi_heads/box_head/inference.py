@@ -146,7 +146,6 @@ def make_roi_box_post_processor(cfg):
     nms_thresh = cfg.MODEL.ROI_HEADS.NMS
     detections_per_img = cfg.MODEL.ROI_HEADS.DETECTIONS_PER_IMG
 
-    postprocessor = PostProcessor(
+    return PostProcessor(
         score_thresh, nms_thresh, detections_per_img, box_coder
     )
-    return postprocessor

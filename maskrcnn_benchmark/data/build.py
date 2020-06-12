@@ -69,8 +69,7 @@ def make_data_sampler(dataset, shuffle, distributed):
 def _quantize(x, bins):
     bins = copy.copy(bins)
     bins = sorted(bins)
-    quantized = list(map(lambda y: bisect.bisect_right(bins, y), x))
-    return quantized
+    return list(map(lambda y: bisect.bisect_right(bins, y), x))
 
 
 def _compute_aspect_ratios(dataset):
@@ -111,8 +110,6 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, start_iter=0):
         assert (
             images_per_batch % num_gpus == 0
         ), "SOLVER.IMS_PER_BATCH ({}) must be divisible by the number "
-        "of GPUs ({}) used.".format(images_per_batch, num_gpus)
-        images_per_gpu = images_per_batch // num_gpus
         shuffle = True
         num_iters = cfg.SOLVER.MAX_ITER
     else:
@@ -120,12 +117,12 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, start_iter=0):
         assert (
             images_per_batch % num_gpus == 0
         ), "TEST.IMS_PER_BATCH ({}) must be divisible by the number "
-        "of GPUs ({}) used.".format(images_per_batch, num_gpus)
-        images_per_gpu = images_per_batch // num_gpus
         shuffle = False if not is_distributed else True
         num_iters = None
         start_iter = 0
 
+    "of GPUs ({}) used.".format(images_per_batch, num_gpus)
+    images_per_gpu = images_per_batch // num_gpus
     if images_per_gpu > 1:
         logger = logging.getLogger(__name__)
         logger.warning(

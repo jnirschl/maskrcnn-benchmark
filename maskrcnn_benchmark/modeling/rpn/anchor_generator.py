@@ -132,10 +132,9 @@ def make_anchor_generator(config):
         ), "FPN should have len(ANCHOR_STRIDE) == len(ANCHOR_SIZES)"
     else:
         assert len(anchor_stride) == 1, "Non-FPN should have a single ANCHOR_STRIDE"
-    anchor_generator = AnchorGenerator(
+    return AnchorGenerator(
         anchor_sizes, aspect_ratios, anchor_stride, straddle_thresh
     )
-    return anchor_generator
 
 
 # Copyright (c) 2017-present, Facebook, Inc.
@@ -231,7 +230,7 @@ def _mkanchors(ws, hs, x_ctr, y_ctr):
     """
     ws = ws[:, np.newaxis]
     hs = hs[:, np.newaxis]
-    anchors = np.hstack(
+    return np.hstack(
         (
             x_ctr - 0.5 * (ws - 1),
             y_ctr - 0.5 * (hs - 1),
@@ -239,7 +238,6 @@ def _mkanchors(ws, hs, x_ctr, y_ctr):
             y_ctr + 0.5 * (hs - 1),
         )
     )
-    return anchors
 
 
 def _ratio_enum(anchor, ratios):
@@ -249,8 +247,7 @@ def _ratio_enum(anchor, ratios):
     size_ratios = size / ratios
     ws = np.round(np.sqrt(size_ratios))
     hs = np.round(ws * ratios)
-    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
-    return anchors
+    return _mkanchors(ws, hs, x_ctr, y_ctr)
 
 
 def _scale_enum(anchor, scales):
@@ -258,5 +255,4 @@ def _scale_enum(anchor, scales):
     w, h, x_ctr, y_ctr = _whctrs(anchor)
     ws = w * scales
     hs = h * scales
-    anchors = _mkanchors(ws, hs, x_ctr, y_ctr)
-    return anchors
+    return _mkanchors(ws, hs, x_ctr, y_ctr)

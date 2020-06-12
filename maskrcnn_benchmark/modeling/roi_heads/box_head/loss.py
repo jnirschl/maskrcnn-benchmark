@@ -170,6 +170,4 @@ def make_roi_box_loss_evaluator(cfg):
         cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE, cfg.MODEL.ROI_HEADS.POSITIVE_FRACTION
     )
 
-    loss_evaluator = FastRCNNLossComputation(matcher, fg_bg_sampler, box_coder)
-
-    return loss_evaluator
+    return FastRCNNLossComputation(matcher, fg_bg_sampler, box_coder)

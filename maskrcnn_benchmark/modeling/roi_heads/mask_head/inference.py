@@ -171,7 +171,7 @@ class Masker(object):
             paste_mask_in_image(mask[0], box, im_h, im_w, self.threshold, self.padding)
             for mask, box in zip(masks, boxes.bbox)
         ]
-        if len(res) > 0:
+        if res:
             res = torch.stack(res, dim=0)[:, None]
         else:
             res = masks.new_empty((0, 1, masks.shape[-2], masks.shape[-1]))
@@ -200,5 +200,4 @@ def make_roi_mask_post_processor(cfg):
         masker = Masker(threshold=mask_threshold, padding=1)
     else:
         masker = None
-    mask_post_processor = MaskPostProcessor(masker)
-    return mask_post_processor
+    return MaskPostProcessor(masker)

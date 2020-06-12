@@ -89,7 +89,7 @@ class PascalVOCDataset(torch.utils.data.Dataset):
         gt_classes = []
         difficult_boxes = []
         TO_REMOVE = 1
-        
+
         for obj in target.iter("object"):
             difficult = int(obj.find("difficult").text) == 1
             if not self.keep_difficult and difficult:
@@ -115,13 +115,12 @@ class PascalVOCDataset(torch.utils.data.Dataset):
         size = target.find("size")
         im_info = tuple(map(int, (size.find("height").text, size.find("width").text)))
 
-        res = {
+        return {
             "boxes": torch.tensor(boxes, dtype=torch.float32),
             "labels": torch.tensor(gt_classes),
             "difficult": torch.tensor(difficult_boxes),
             "im_info": im_info,
         }
-        return res
 
     def get_img_info(self, index):
         img_id = self.ids[index]

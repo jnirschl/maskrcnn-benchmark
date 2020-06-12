@@ -12,8 +12,7 @@ from . import resnet
 @registry.BACKBONES.register("R-50-C4")
 def build_resnet_backbone(cfg):
     body = resnet.ResNet(cfg)
-    model = nn.Sequential(OrderedDict([("body", body)]))
-    return model
+    return nn.Sequential(OrderedDict([("body", body)]))
 
 
 @registry.BACKBONES.register("R-50-FPN")
@@ -32,8 +31,7 @@ def build_resnet_fpn_backbone(cfg):
         out_channels=out_channels,
         top_blocks=fpn_module.LastLevelMaxPool(),
     )
-    model = nn.Sequential(OrderedDict([("body", body), ("fpn", fpn)]))
-    return model
+    return nn.Sequential(OrderedDict([("body", body), ("fpn", fpn)]))
 
 
 def build_backbone(cfg):

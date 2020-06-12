@@ -131,11 +131,12 @@ class RPNPostProcessor(torch.nn.Module):
             boxlists (list[BoxList]): the post-processed anchors, after
                 applying box decoding and NMS
         """
-        sampled_boxes = []
         num_levels = len(objectness)
         anchors = list(zip(*anchors))
-        for a, o, b in zip(anchors, objectness, box_regression):
-            sampled_boxes.append(self.forward_for_single_feature_map(a, o, b))
+        sampled_boxes = [
+            self.forward_for_single_feature_map(a, o, b)
+            for a, o, b in zip(anchors, objectness, box_regression)
+        ]
 
         boxlists = list(zip(*sampled_boxes))
         boxlists = [cat_boxlist(boxlist) for boxlist in boxlists]
@@ -191,7 +192,7 @@ def make_rpn_postprocessor(config, rpn_box_coder, is_train):
         post_nms_top_n = config.MODEL.RPN.POST_NMS_TOP_N_TEST
     nms_thresh = config.MODEL.RPN.NMS_THRESH
     min_size = config.MODEL.RPN.MIN_SIZE
-    box_selector = RPNPostProcessor(
+    return RPNPostProcessor(
         pre_nms_top_n=pre_nms_top_n,
         post_nms_top_n=post_nms_top_n,
         nms_thresh=nms_thresh,
@@ -199,4 +200,3 @@ def make_rpn_postprocessor(config, rpn_box_coder, is_train):
         box_coder=rpn_box_coder,
         fpn_post_nms_top_n=fpn_post_nms_top_n,
     )
-    return box_selector
